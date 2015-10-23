@@ -1,0 +1,83 @@
+@import "./settings";
+
+.fontWeightLight{
+  font-weight: var(--font-weight-light)
+}
+.fontWeightNormal{
+  font-weight: var(--font-weight-normal)
+}
+.fontWeightBold{
+  font-weight: var(--font-weight-normal)
+}
+.fontSizeNormal{
+  font-size: var(--font-size-normal);
+}
+.fontSizeLarge{
+  font-size: var(--font-size-large);
+}
+.fontSizeXLarge{
+  font-size: var(--font-size-xlarge);
+}
+.borderColor{
+  border-color:var(--blue-gray-lightest);
+}
+.borderRadius{
+  border-radius: var(--global-radius);
+}
+.smallBorderRadius{
+  border-radius: calc(var(--global-radius)/2);
+}
+.boxShadowFilet{
+  box-shadow: 0 0 0 2px color(var(--primary) alpha(-60%));
+}
+.darkerText{
+  color: var(--blue-gray-darker);
+}
+.primaryText{
+  color: var(--primary);
+}
+.linkText{
+  color: var(--link-color);
+}
+.primaryBackground{
+  background-color: var(--primary);
+}
+.whiteBackground{
+  background-color: white;
+}
+.link{
+  composes: linkText;
+  cursor: pointer;
+  background: transparent;
+  text-decoration: none;
+  outline-width: 5px;
+  transition: all .2s ease-out;
+  &:hover{
+    color: color(var(--link-color) blackness(-20%));
+  }
+  &:focus{
+    color: color(var(--link-color) blackness(-20%));
+  }
+}
+.button{
+  cursor: pointer;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-bold);
+  line-height: calc(var(--line-height-normal)*1);
+  appearance: none;
+  border: none;
+  box-sizing: border-box;
+  display: inline-block;
+  outline-width: 0;
+  margin: 0;
+  padding: 6px 20px;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  white-space: nowrap;
+  transition: opacity .2s ease-out, color .2s ease-out, background-color .2s ease-out;
+  @media (--small-only){
+    padding: 12px 0;
+  }
+}

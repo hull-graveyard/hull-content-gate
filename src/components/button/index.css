@@ -1,0 +1,46 @@
+@import "../../styles/settings";
+
+.button{
+  composes: button from '../../styles/mixins.css';
+
+  font-size: var(--font-size-normal);
+  position: relative;
+  top: -4px;
+
+  &.text{
+    background: transparent;
+  }
+
+  &.block{
+    display: block;
+    width: 100%;
+  }
+
+  &.square{
+    border-radius: 0;
+  }
+
+  &.radius{
+    border-radius: 3px;
+  }
+
+  &.rounded, &.circle{
+    border-radius: 1000px;
+    text-align: center;
+  }
+
+  &.circle{
+    width: auto;
+  }
+
+  &.default{
+    color: white;
+  }
+
+  &.disabled{
+    cursor: not-allowed;
+    opacity: 0.3;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
+  }
+
+}
