@@ -9,7 +9,7 @@ import reactCSSModules from 'react-css-modules';
 import shipStyles from './index.css';
 import Icon from '../icon';
 import Button from '../button';
-import { translate } from '../lib/i18n';
+import { translate } from '../../lib/i18n';
 
 @reactCSSModules(shipStyles, {allowMultiple: true})
 export default class Ship extends React.Component {
