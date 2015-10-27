@@ -27,27 +27,37 @@ export default class Engine extends EventEmitter {
   constructor(element, deployment, hull) {
     super();
 
-    const isGated = _.some(deployment.settings.gated_pages, (page)=>{
-      return new RegExp(page).test(window.location.pathname);          
-    });
-
+    this._hull = hull;
+    this._user = this._hull.currentUser();
 
     this._ship = deployment.ship;
-    this._hull = hull;
+    this._settings = this._ship.settings;
+    this._cutoff = this._settings.cutoff;
+
+    this._deployment_settings = deployment.settings;
+
     this.element = element;
     this.container = element.parentNode;
+
+    if (!this._pristine) { this._pristine = this.container.innerHTML; }
+    if (this.isGated()) { this.snip(this.container); }
 
     const onChange = () => {
       this.resetUser();
       this.emitChange();
     };
-    if (!this._pristine) { this._pristine = this.container.innerHTML; }
-    this.cutoff = deployment.ship.settings.cutoff;
-    if (isGated) {
-      this.snip(this.container);
-    }
     this._hull.on('hull.user.*', onChange);
     onChange();
+  }
+
+  pageMatches() {
+    return _.some(this._deployment_settings.gated_pages, (page)=>{
+      return new RegExp(page).test(window.location.pathname);
+    });
+  }
+
+  isGated() {
+    return this.pageMatches() && !this._user;
   }
 
   resetUser() {
@@ -58,7 +68,7 @@ export default class Engine extends EventEmitter {
 
   snip(container) {
     const paragraphs = _.pull([...container.children], this.element);
-    let cut = this.cutoff;
+    let cut = this._cutoff;
     if (paragraphs.length > 2) {
       // Skip paragraphs as long as we're not below cutoff.\
       while (paragraphs.length) {
