@@ -28,7 +28,7 @@ export default class Engine extends EventEmitter {
     super();
 
     const isGated = _.some(deployment.settings.gated_pages, (page)=>{
-      new RegExp(page).test(window.location.pathname);          
+      return new RegExp(page).test(window.location.pathname);          
     });
 
 
