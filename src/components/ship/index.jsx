@@ -7,7 +7,7 @@ import React from 'react';
 // CSS Modules for sandboxed styles.
 import reactCSSModules from 'react-css-modules';
 import shipStyles from './index.css';
-import Icon from '../icon';
+import Style from '../style';
 import Button from '../button';
 import { translate } from '../../lib/i18n';
 
@@ -34,23 +34,22 @@ export default class Ship extends React.Component {
     this.setState(this.props.engine.getState());
   }
 
-  handleLogin = () => {
-    this.props.engine.login();
+  handleReveal = () => {
+    this.props.engine.reveal();
   }
   render() {
     const shape = 'radius';
-    if (this.state.user) {
+    if (this.state.open) {
       return <div></div>;
     }
     return (
       <div styleName="overlay">
-        <p className="right">
-          <Button
-            block={false}
-            shape={shape}
-            onClick={this.handleLogin}><Icon colorize={shape !== 'text'} name="user_circle"/>{translate('log in')}</Button>
-        </p>
-        <p><strong>{translate('log in to view content')}</strong></p>
+        <Style settings={this.state.settings}/>
+        <div styleName="gradient"></div>
+        <Button
+          block={false}
+          shape={shape}
+          onClick={this.handleReveal}>{translate('Read More')}</Button>
       </div>
     );
   }

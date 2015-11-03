@@ -28,26 +28,32 @@ export default class Engine extends EventEmitter {
     super();
 
     this._hull = hull;
-    this._user = this._hull.currentUser();
-
     this._ship = deployment.ship;
     this._settings = this._ship.settings;
     this._cutoff = this._settings.cutoff;
 
     this._deployment_settings = deployment.settings;
-
     this.element = element;
     this.container = element.parentNode;
+
+    this.setInitialState();
 
     if (!this._pristine) { this._pristine = this.container.innerHTML; }
     if (this.isGated()) { this.snip(this.container); }
 
     const onChange = () => {
-      this.resetUser();
+      this._user = this._hull.currentUser();
+      if (this.isOpen()) {
+        this.restore();
+      }
       this.emitChange();
     };
+
     this._hull.on('hull.user.*', onChange);
     onChange();
+  }
+  restore() {
+    this.element.parentNode.innerHTML = this._pristine;
   }
 
   pageMatches() {
@@ -57,14 +63,48 @@ export default class Engine extends EventEmitter {
   }
 
   isGated() {
-    return this.pageMatches() && !this._user;
+    return this.pageMatches() && !this.isOpen();
   }
 
-  resetUser() {
+  hasUser() {
+    return this._user && (this._user.email || this._user.contact_email);
+  }
+
+  isOpen() {
+    const action = this._settings.button_action;
+    if (action === 'click') { return this._open; }
+    return this._open || this.hasUser();
+  }
+
+  updateShip(ship) {
+    this._ship = ship;
+    this.emitChange();
+  }
+
+  setInitialState() {
+    this._open = false;
     this._user = this._hull.currentUser();
-    this.unsnip();
   }
 
+
+  getState() {
+    return {
+      settings: this._ship.settings,
+      open: this.isOpen(),
+    };
+  }
+
+  reveal() {
+    this._hull.track('Reveal Article Content');
+    const action = this._settings.button_action;
+    if (action === 'open') {
+      this._open = true;
+      this.restore();
+      this.emitChange();
+    } else {
+      this._hull.emit('hull.login.showDialog');
+    }
+  }
 
   snip(container) {
     const paragraphs = _.pull([...container.children], this.element);
@@ -83,28 +123,6 @@ export default class Engine extends EventEmitter {
       cutoffParagraph(container, cut);
     }
     this.emitChange();
-  }
-
-  unsnip() {
-    if (this._user && (this._user.email || this._user.contact_email)) {
-      this.element.parentNode.innerHTML = this._pristine;
-    }
-  }
-
-  updateShip(ship) {
-    this._ship = ship;
-    this.emitChange();
-  }
-
-  getState() {
-    return {
-      settings: this._ship.settings,
-      user: this._user,
-    };
-  }
-
-  login() {
-    this._hull.emit('hull.login.showDialog');
   }
 
   addChangeListener(listener) {

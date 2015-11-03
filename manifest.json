@@ -11,6 +11,30 @@
       "description" : "How many characters to display before cutting off content",
       "type": "number",
       "default": 300
+    },
+    {
+      "name": "button_action",
+      "title": "When Button is Clicked",
+      "description": "Choose what happens when button is clicked",
+      "type": "string",
+      "default":"open",
+      "enum": [
+        "open",
+        "require_newsletter",
+        "login"
+      ],
+      "enum_titles": [
+        "Open article immediately",
+        "Fill newsletter email",
+        "Log in (displays login modal)"
+      ]
+    },
+    {
+      "name":"primary_color",
+      "title": "Button color",
+      "type": "string",
+      "format": "color",
+      "default": "#6A7E8F"
     }
   ],
   "deployment_settings":[

@@ -2,11 +2,12 @@
 
 .button{
   composes: button primaryBackground from '../../styles/mixins.css';
-  font-size: var(--font-size-normal);
   font-family: var(--font-family);
-  
+
   position: relative;
-  top: -4px;
+  z-index: 2;
+  max-width: 320px;
+  width: 100%;
 
   &.text{
     background: transparent;
